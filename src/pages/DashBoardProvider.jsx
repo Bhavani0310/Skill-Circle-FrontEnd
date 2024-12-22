@@ -11,8 +11,10 @@ import {
 import Header from "../components/Header";
 import authApi from "../apis/auth.api";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import profile from "../assets/images/user.png";
 import dashBoardApi from "../apis/dashboard.api";
+import authProviderApi from "../apis/auth-provider.api";
 
 async function getAddressFromCoordinates(latitude, longitude) {
   const apiKey = "3c67ac197999db273bdf7e9518a56bea"; // Replace with your Mappls API key
@@ -53,7 +55,7 @@ function getUserLocation() {
   });
 }
 
-const DashboardLayout = () => {
+const DashboardProvider = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("profile");
   const [isEditing, setIsEditing] = useState(false);
@@ -74,7 +76,7 @@ const DashboardLayout = () => {
       [field]: value,
     }));
   };
-
+const navigate=useNavigate()
   const navItems = [
     { id: "profile", icon: BiUser, label: "Profile" },
     { id: "bookings", icon: BiBookmark, label: "Bookings" },
@@ -111,9 +113,12 @@ const DashboardLayout = () => {
   useEffect(() => {
     fetchUserAddress();
 
-    authApi.verifySession({
+    authProviderApi.verifySession({
       success: ({ data }) => {
-        console.log(data.data.username);
+       
+        if(!data.data.isOnboardingCompleted){
+            navigate("/onBoarding")
+        }
         setProfileData((prev) => ({
           ...prev,
           name: data.data?.username,
@@ -741,4 +746,4 @@ const DashboardLayout = () => {
   );
 };
 
-export default DashboardLayout;
+export default DashboardProvider;

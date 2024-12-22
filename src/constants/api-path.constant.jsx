@@ -19,14 +19,21 @@ const apiPathConstants = {
   authProvider:{
     login: setBaseUrlPrefix("/auth/provider/login"),
     logout: setBaseUrlPrefix("/auth/provider/logout"),
+    CheckUserName:setBaseUrlPrefix("/auth/provider/checkUserName"),
     register: setBaseUrlPrefix("/auth/provider/register"),
     verifySession: setBaseUrlPrefix("/auth/provider/verify-session"),
     changePassword: setBaseUrlPrefix("/auth/provider/reset-password"),
     forgotPassword: setBaseUrlPrefix("/auth/provider/forgot-password"),
     verificationEmail: setBaseUrlPrefix("/auth/provider/verify-email/"),
   },
+  dashBoardUser:{
+    updateProfile:setBaseUrlPrefix("/home/userprofile")
+  },
   services:{
-    getAllServices:setBaseUrlPrefix("/home/services")
+    getAllServices:setBaseUrlPrefix("/home/services"),
+    onBoarding:setBaseUrlPrefix("/home/onBoarding"),
+    allServices:setBaseUrlPrefix("/home/allServices"),
+    providerList:setBaseUrlPrefix('/home/providerList')
   }
 };
 

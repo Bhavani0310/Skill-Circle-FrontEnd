@@ -21,6 +21,7 @@ import {
 import { IoMenuOutline } from "react-icons/io5";
 import dashBoardApi from "../apis/dashboard.api";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -35,7 +36,7 @@ const ProductFilterSidebar = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
   const [data, setData] = useState([]);
-
+  const navigate=useNavigate()
   const categories = [
     "Home Improvement",
     "Tutoring",
@@ -51,11 +52,11 @@ const ProductFilterSidebar = () => {
 
   const categoryIcons = {
     "Home Improvement": <FaHome />,
-    Tutoring: <FaGraduationCap />,
+    "Tutoring": <FaGraduationCap />,
     "Pet Care": <FaPaw />,
     "Event Planning": <FaCalendarAlt />,
     "Health & Wellness": <FaHeartbeat />,
-    Technology: <FaLaptop />,
+    "Technology": <FaLaptop />,
     "Home Cooking": <FaUtensils />,
     "Beauty & Personal Care": <FaCut />,
     "Arts & Crafts": <FaPaintBrush />,
@@ -137,6 +138,9 @@ const ProductFilterSidebar = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleBookBtn=(service)=>{
+    navigate(`/list?service=${service}`)
+  }
   return (
     <>
       <Header isScrolled={true} />
@@ -243,14 +247,11 @@ const ProductFilterSidebar = () => {
                     >
                       <div className="relative w-full h-48">
                         <img
-                          src={`${service.image}`}
+                          src={service.image}
                           alt={service.name}
                           className="w-full h-full object-cover"
                           loading="lazy"
-                          onError={(e) => {
-                            e.target.src =
-                              "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11";
-                          }}
+                          
                         />
                       </div>
                       <div className="p-4 space-y-3">
@@ -272,7 +273,7 @@ const ProductFilterSidebar = () => {
                           </div>
                           <button
                             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
-                            onClick={() => alert(`Booking ${service.name}`)}
+                            onClick={() => handleBookBtn(service.name)}
                           >
                             Book Now
                           </button>
@@ -336,7 +337,7 @@ const ProductFilterSidebar = () => {
           )}
         </div>
       </div>
-      <Footer/>
+      {/* <Footer/> */}
     </>
   );
 };

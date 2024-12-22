@@ -2,7 +2,7 @@ import React ,{useState,useEffect}from "react";
 import logo from "../assets/images/logo.png";
 import Header from "../components/Header";
 import { ReactComponent as SigUpLogo } from "../assets/signUp.svg";
-import authApi from "../apis/auth.api";
+import authProviderApi from "../apis/auth-provider.api";
 import { toast } from "react-toastify";
 
 
@@ -18,7 +18,7 @@ const useDebounce = (value, delay) => {
   return debouncedValue;
 };
 
-const SignUp = () => {
+const ServiceSignUp = () => {
 
   const [email,setEmail]=useState();
   const [username,setUserName]=useState();
@@ -33,7 +33,7 @@ const SignUp = () => {
   // Check username availability whenever debounced username changes
   useEffect(() => {
     if (debouncedUsername && username) {
-      authApi.handleUserName({
+      authProviderApi.handleUserName({
         payload: { username: debouncedUsername },
         success: (res) => {
           console.log(res)
@@ -64,10 +64,10 @@ const SignUp = () => {
     const left = window.screen.width / 2 - popupWidth / 2;
     const top = window.screen.height / 2 - popupHeight / 2;
   
- 
+  
 
     const popup = window.open(
-      `${process.env.REACT_APP_BACKEND}/auth/google`,
+      `${process.env.REACT_APP_BACKEND}/auth/provider/google`,
       'GoogleLoginPopup',
       `width=${popupWidth},height=${popupHeight},top=${top},left=${left},resizable,scrollbars`
     );
@@ -95,9 +95,9 @@ const SignUp = () => {
         const { provider } = event.data;
         if (provider) {
          // localStorage.setItem('authToken', provider);
-          window.location.href = '/dashboard';
+          window.location.href = '/proDashboard';
         }
-      } else {      
+      } else {
         console.warn('Message from unauthorized origin:', event.origin);
       }
     });
@@ -144,7 +144,7 @@ const SignUp = () => {
 
     if (hasError) return;
 
-    authApi.handleRegister({
+    authProviderApi.handleRegister({
       payload:{
         username,
         email,
@@ -176,7 +176,7 @@ const SignUp = () => {
               <img src={logo} class="w-10 mx-auto" />
             </div>
             <div class="mt-12 flex flex-col items-center">
-              <h1 class="text-2xl xl:text-3xl font-extrabold">Sign up</h1>
+              <h1 class="text-2xl xl:text-3xl font-extrabold">Sign up as Service Provider</h1>
               <div class="w-full flex-1 mt-8">
                 <div class="flex flex-col items-center">
                   <button class="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline" onClick={handleGoogleLogin}>
@@ -273,4 +273,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default ServiceSignUp;

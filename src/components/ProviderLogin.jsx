@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import authApi from "../apis/auth.api";
+import authProviderApi from "../apis/auth-provider.api";
 import { toast } from "react-toastify";
 import currentUserState from "../store/user.store";
 import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 
-const LoginPopup = ({ isOpen, onClose, userType }) => {
+const ProviderLogin = ({ isOpen, onClose, userType }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -13,7 +13,6 @@ const LoginPopup = ({ isOpen, onClose, userType }) => {
   useRecoilState(currentUserState);
 
   const navigate=useNavigate();
-
 
   const handleGoogleLogin = () => {
 
@@ -26,7 +25,7 @@ const LoginPopup = ({ isOpen, onClose, userType }) => {
     onClose();
 
     const popup = window.open(
-      `${process.env.REACT_APP_BACKEND}/auth/google`,
+      `${process.env.REACT_APP_BACKEND}/auth/provider/google`,
       'GoogleLoginPopup',
       `width=${popupWidth},height=${popupHeight},top=${top},left=${left},resizable,scrollbars`
     );
@@ -54,15 +53,16 @@ const LoginPopup = ({ isOpen, onClose, userType }) => {
         const { provider } = event.data;
         if (provider) {
          // localStorage.setItem('authToken', provider);
-          window.location.href = '/dashboard';
+          window.location.href = '/proDashboard';
         }
-      } else {      
+      } else {
         console.warn('Message from unauthorized origin:', event.origin);
       }
     });
     
 
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -86,7 +86,7 @@ const LoginPopup = ({ isOpen, onClose, userType }) => {
 
     if (hasError) return;
 
-    authApi.handleLogin({
+    authProviderApi.handleLogin({
       payload: {
         email,
         password,
@@ -206,7 +206,7 @@ const LoginPopup = ({ isOpen, onClose, userType }) => {
 
             <div className="mt-6 text-center text-sm text-slate-600">
               Don't have an account?
-              <a href="/signup" className="font-medium text-[#4285f4]">
+              <a href="/ProviderSignUp" className="font-medium text-[#4285f4]">
                 Sign up
               </a>
             </div>
@@ -217,4 +217,4 @@ const LoginPopup = ({ isOpen, onClose, userType }) => {
   );
 };
 
-export default LoginPopup;
+export default ProviderLogin;

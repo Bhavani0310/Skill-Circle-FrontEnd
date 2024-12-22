@@ -3,13 +3,20 @@ import apiPath from "../constants/api-path.constant";
 
 import axios from "../configs/axios-instances";
 
-const authApi = {
+const authProviderApi = {
   handleLogin: ({ payload, success, error }) => {
     const {
       authProvider: { login },
     } = apiPath;
 
     axios.postRequest({ path: login, payload, success, error });
+  },
+  handleUserName: ({ payload, success, error }) => {
+    const {
+      authProvider: { CheckUserName },
+    } = apiPath;
+
+    axios.postRequest({ path: CheckUserName, payload, success, error });
   },
   handleLogout: ({ success, error }) => {
     const {
@@ -29,6 +36,12 @@ const authApi = {
     } = apiPath;
     axios.postRequest({ path: verifySession, payload, success, error, final });
   },
+  sendVerificationEmail:({payload,success,error,final})=>{
+    const {
+      authProvider: { sendVerifyEmail },
+    } = apiPath;
+    axios.postRequest({ path: sendVerifyEmail, payload, success, error, final });
+  },
   handleVerificationEmail: ({ payload, verify_token, success, error }) => {
     const {
       authProvider: { verificationEmail },
@@ -42,11 +55,11 @@ const authApi = {
       error,
     });
   },
-  resetPassword: ({ payload, password_reset_token, success, error }) => {
+  resetPassword: ({ payload, password_reset_token,success, error }) => {
     const {
       authProvider: { forgotPassword },
     } = apiPath;
-    const pathWithParams = `${forgotPassword}/${password_reset_token}`;
+    const pathWithParams= `${forgotPassword}/${password_reset_token}`
     axios.postRequest({ path: pathWithParams, payload, success, error });
   },
   changePassword: ({ payload, password_reset_token, success, error }) => {
@@ -64,4 +77,4 @@ const authApi = {
   },
 };
 
-export default authApi;
+export default authProviderApi;

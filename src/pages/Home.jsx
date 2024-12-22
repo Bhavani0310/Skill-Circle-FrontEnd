@@ -5,10 +5,20 @@ import Reviews from "../components/Reviews";
 import TopRatedCarousel from "../components/TopRatedCarousel";
 import Header from "../components/Header";
 import Features from "../components/Features";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import currentUserState from "../store/user.store";
+import { useRecoilState } from "recoil";
+import authApi from "../apis/auth.api";
+import authProviderApi from "../apis/auth-provider.api";
+
 
 const Home = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const [currentLoggedInUser, setCurrentLoggedInUser] =
+    useRecoilState(currentUserState);
+
+  
 
   const handleScroll = () => {
     if (window.scrollY > 50) {
@@ -18,6 +28,47 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    authApi.verifySession({
+      success: ({ data }) => {
+        const userData = {
+          isLoggedIn: true,
+          Id: data.data.userId,
+          name: data.data.username,
+          address: data.data.address,
+          email: data.data.email,
+          mobile: data.data.mobile,
+          isEmailVerified: data.data.isEmailVerified,
+          isOnBoardingCompleted: data.data.isOnBoardingCompleted,
+          userType: data.data.userType,
+          profilePicture: data.data.profilePhoto,
+        };
+
+        setCurrentLoggedInUser(userData);
+      },
+      error: () => {
+        authProviderApi.verifySession({
+          success: ({ data }) => {
+            const userData = {
+              isLoggedIn: true,
+              Id: data.data.userId,
+              name: data.data.username,
+              address: data.data.address,
+              email: data.data.email,
+              mobile: data.data.mobile,
+              isEmailVerified: data.data.isEmailVerified,
+              isOnBoardingCompleted: data.data.isOnBoardingCompleted,
+              userType: data.data.userType,
+              profilePicture: data.data.profilePhoto,
+            };
+
+            setCurrentLoggedInUser(userData);
+          },
+          error: () => {},
+        });
+      },
+    });
+  }, []);
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -56,10 +107,10 @@ const Home = () => {
       <TopRatedCarousel />
 
       <Features />
-      
-      <Reviews />
+
+     <Reviews /> 
+     
       <Footer />
-          
     </>
   );
 };

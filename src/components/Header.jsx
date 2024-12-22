@@ -4,7 +4,10 @@ import logo from "../assets/images/logo.png";
 import { useNavigate ,Link} from "react-router-dom";
 import currentUserState from "../store/user.store";
 import { useRecoilState } from "recoil";
-
+import ProviderLogin from "./ProviderLogin";
+import authApi from "../apis/auth.api";
+import { toast } from "react-toastify";
+import authProviderApi from "../apis/auth-provider.api";
 const Header = ({ isScrolled }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [userType, setUserType] = useState("");
@@ -21,23 +24,65 @@ const Header = ({ isScrolled }) => {
 
   const [showPopup, setShowPopup] = useState(false);
 
+  const [providerPopup,setProviderPopup] = useState(false);
+
   const closePopup = () => setShowPopup(false);
+
+  const ProviderClosePopup = () => setProviderPopup(false);
 
   const signUpBtn = () => {
     navigate("/signUp");
   };
+  const handleProfileBtn=(type)=>{
+    if(type=="Customer"){
+      navigate("/dashboard")
+    }else{
+      navigate("/proDashboard")
+    }
+  }
   const handleLoginSelection = (type) => {
     setUserType(type);
     setShowDropdown(false);
-    setShowPopup(true);
+    if(type==='Customer'){
+      setShowPopup(true);
+    }else{
+      setProviderPopup(true);
+    }
+   
   };
 
   const toggleUserDropdown = () => {
     setShowUserDropdown(!showUserDropdown);
   };
 
-  const handleLogout = () => {
-    // Add your logout logic here
+  const handleLogout = (type) => {
+    if(type==="Customer"){
+    authApi.handleLogout({
+      success:(res)=>{
+        toast.success("Logged Out",{
+          position:"top-center",
+          autoClose:2000
+        })
+        navigate("/")
+      },
+      error:(err)=>{
+
+      }
+    })
+  }else{
+    authProviderApi.handleLogout({
+      success:(res)=>{
+        toast.success("Logged Out",{
+          position:"top-center",
+          autoClose:2000
+        })
+        navigate("/")
+      },
+      error:(err)=>{
+
+      }
+    })
+  }
     console.log("Logging out...");
     setShowUserDropdown(false);
   };
@@ -121,12 +166,14 @@ const Header = ({ isScrolled }) => {
             onClick={toggleUserDropdown}
             className="bg-transparent  text-white font-bold py-2 px-4 rounded  relative"
           >
-            <svg fill="none" viewBox="0 0 15 15" height="2em" width="2em" >
+            {currentLoggedInUser?.profilePicture ? 
+            <img src={currentLoggedInUser?.profilePicture} loading="lazy" className="w-10 rounded-3xl h-auto"/>
+            :(<svg fill="none" viewBox="0 0 15 15" height="2em" width="2em" >
       <path
         fill="currentColor"
         d="M3 13v.5h1V13H3zm8 0v.5h1V13h-1zm-7 0v-.5H3v.5h1zm2.5-3h2V9h-2v1zm4.5 2.5v.5h1v-.5h-1zM8.5 10a2.5 2.5 0 012.5 2.5h1A3.5 3.5 0 008.5 9v1zM4 12.5A2.5 2.5 0 016.5 10V9A3.5 3.5 0 003 12.5h1zM7.5 3A2.5 2.5 0 005 5.5h1A1.5 1.5 0 017.5 4V3zM10 5.5A2.5 2.5 0 007.5 3v1A1.5 1.5 0 019 5.5h1zM7.5 8A2.5 2.5 0 0010 5.5H9A1.5 1.5 0 017.5 7v1zm0-1A1.5 1.5 0 016 5.5H5A2.5 2.5 0 007.5 8V7zm0 7A6.5 6.5 0 011 7.5H0A7.5 7.5 0 007.5 15v-1zM14 7.5A6.5 6.5 0 017.5 14v1A7.5 7.5 0 0015 7.5h-1zM7.5 1A6.5 6.5 0 0114 7.5h1A7.5 7.5 0 007.5 0v1zm0-1A7.5 7.5 0 000 7.5h1A6.5 6.5 0 017.5 1V0z"
       />
-    </svg>
+    </svg>)}
           </button>
 
           {/* User dropdown */}
@@ -136,13 +183,13 @@ const Header = ({ isScrolled }) => {
                 <span className="text-sm">{currentLoggedInUser.name}</span>
               </div>
               <button
-                onClick={() => handleLoginSelection("Profile")}
+                onClick={() => handleProfileBtn(currentLoggedInUser.userType)}
                 className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition duration-200 rounded-md"
               >
                 <span className="text-sm">Profile</span>
               </button>
               <button
-                onClick={handleLogout}
+                onClick={()=>handleLogout(currentLoggedInUser.userType)}
                 className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition duration-200 rounded-md"
               >
                 <span className="text-sm">Logout</span>
@@ -218,6 +265,7 @@ const Header = ({ isScrolled }) => {
         )}
       </header>
       <LoginPopup isOpen={showPopup} onClose={closePopup} userType={userType} />
+      <ProviderLogin isOpen={providerPopup} onClose={ProviderClosePopup} userType={userType}/>
     </>
   );
 };

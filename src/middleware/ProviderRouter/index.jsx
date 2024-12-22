@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { useNavigate, Outlet, Navigate } from "react-router-dom";
-
 import currentUserState from "../../store/user.store";
-
-import authApi from "../../apis/auth.api";
 import Loader from "../../components/Loader/Loader";
+import authProviderApi from "../../apis/auth-provider.api";
 
-export default function ProtectedRouter() {
+export default function ProviderRouter() {
   const navigate = useNavigate();
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -15,7 +13,7 @@ export default function ProtectedRouter() {
     useRecoilState(currentUserState);
 
   const checkUserSession = () => {
-    authApi.verifySession({
+    authProviderApi.verifySession({
       success: ({ data }) => {
         const userData = {
           isLoggedIn: true,
@@ -27,14 +25,12 @@ export default function ProtectedRouter() {
           isEmailVerified:data.data.isEmailVerified,
           isOnBoardingCompleted:data.data.isOnBoardingCompleted,
           userType: data.data.userType,
-          profilePicture:data.data.profilePicture
+          profilePicture:data.data.profilePhoto
         };
 
-        if(data.data.userType==="Provider"){
-          navigate("/");
-      }
-
-
+        if(data.data.userType==="Customer"){
+            navigate("/");
+        }
         setCurrentLoggedInUser(userData);
       },
       error: () => {
