@@ -9,12 +9,11 @@ import AuthProviderSuccess from "../components/AuthProviderSuccess";
 
 const Signup = lazy(() => import("../pages/SignUp"));
 const routes = [
-  { name: "Register", path: "/signUp", element: <Signup /> },
+  { name: "Register", path: "/signUp", element: <Signup />},
   { name: "RegisterProvider", path: "/ProviderSignUp", element: <ServiceSignUp/> },
   {name: "Contact" , path:"/contact",element:<Contact/>},
   {name:"VerifyEmail",path:"/verify-email/:verificationToken",element:<VerifyEmail/>},
   {name:"Services", path:"/services",element:<Services/>},
- 
   {name:"AuthGoogle",path:"/auth-success",element:<AuthSuccess/>},
   {name:"AuthProvider",path:"/provider-success",element:<AuthProviderSuccess/>}
 ];

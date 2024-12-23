@@ -247,7 +247,7 @@ const ProductFilterSidebar = () => {
                     >
                       <div className="relative w-full h-48">
                         <img
-                          src={service.image}
+                          src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11"
                           alt={service.name}
                           className="w-full h-full object-cover"
                           loading="lazy"

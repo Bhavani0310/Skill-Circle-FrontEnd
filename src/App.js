@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./index.css"
+import "./index.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import navigationRoutes from "./routes/auth-route";
@@ -12,7 +12,6 @@ import SuspenseLayout from "./components/SuspenseLayout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NotFound from "./pages/NotFound";
-
 
 function App() {
   return (
@@ -40,7 +39,7 @@ function App() {
               </Route>
             </Route>
 
-            <Route element={<ProviderRouter/>}>
+            <Route element={<ProviderRouter />}>
               <Route>
                 {providerRoutes.map((route, index) => (
                   <Route key={index} path={route.path} element={route.element}>
@@ -55,7 +54,7 @@ function App() {
                   </Route>
                 ))}
               </Route>
-            </Route>  
+            </Route>
 
             {nonAuthRoute.map((route, index) => {
               return (
