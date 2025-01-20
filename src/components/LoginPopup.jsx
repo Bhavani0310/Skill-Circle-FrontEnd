@@ -38,7 +38,7 @@ const LoginPopup = ({ isOpen, onClose, userType }) => {
   
     window.addEventListener('message', (event) => {
 
-      if (event.origin === "http://localhost:3000") {
+      if (event.origin === "https://skill-circle-puce.vercel.app") {
         const { token } = event.data;
         if (token) {
           window.location.href = '/dashboard';
@@ -49,7 +49,7 @@ const LoginPopup = ({ isOpen, onClose, userType }) => {
     });
 
     window.addEventListener('message', (event) => {
-      if (event.origin === 'http://localhost:3000') {
+      if (event.origin === 'https://skill-circle-puce.vercel.app') {
         console.log('Valid message received:', event.data);
         const { provider } = event.data;
         if (provider) {
